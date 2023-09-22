@@ -18,7 +18,7 @@ To install and configure the Web Chat module, please follow the instructions pro
 
 ## System Requirements
 
-- [Python 3.10](https://www.python.org)
+- [Python 3.10] The stability is guaranteed only on Python 3.10. As of July 22, 2023, there are some conflicts between aioredis and the asyncio module on Python 3.11.
 - [Aiogram]
 - [Aiohttp]
 - [Redis]
