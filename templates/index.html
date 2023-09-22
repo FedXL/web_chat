@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebChat</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <style>
+
+    .chat-container{
+        flex: auto;
+        border-radius: 10px;
+        max-width: 400px;
+        max-height: 300px;
+    }
+    .input-container {
+        justify-content: flex-end;
+        max-height: 150px;
+        background-color: #f0f0f0;
+        border: 1px solid #c9c5c5;
+        width: 400px; /* Ширина контейнера, можете настроить по вашему усмотрению */
+    }
+
+
+
+    .messagesInChat {
+        flex: auto;
+        height: 300px;
+        width: 400px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        flex-grow: 1;
+        min-height: 50%;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+    }
+
+    .custom-textarea {
+
+        width: 300px;
+        min-height: 30px; /* Начальная высота */
+        max-height: 150px; /* Максимальная высота */
+        overflow-y: hidden;
+        outline: none;
+        white-space: pre-wrap;
+        border: none;
+        resize: block;
+    }
+
+
+    .message-input {
+
+        width: 80%;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .send-button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .send-button:hover {
+        background-color: #0056b3;
+    }
+
+    .attachment-button {
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+        outline: none;
+    }
+    .attachment-button:hover {
+        color: #007bff;
+    }
+
+    .messageContainer {
+        display: flex;
+        padding: 5px;
+    }
+
+.messageQuestion {
+    border: 2px solid #8660e5;
+    border-radius: 10px;
+    background-color: lightblue;
+    padding: 10px;
+    overflow-wrap: break-word;
+    max-width:65%;
+    margin-bottom:5px;
+
+}
+
+.messageAnswer {
+    border: 2px solid darkorange;
+    border-radius: 10px;
+    background-color: #FFE0B2;
+    padding: 10px;
+    overflow-wrap: break-word;
+    max-width:60%;
+    margin-bottom: 5px;
+    margin-right: 25px;
+}
+    .spacer {
+        flex: 1;
+        min-width: 30%;
+}
+    .image {
+        cursor: pointer;
+        transition: transform 0.3s;
+        border-radius: 10px;
+    }
+
+
+
+
+        button {
+            margin-left: 5px;
+            padding: 10px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            flex-shrink: 0;
+            transition: background-color 0.3s, color 0.3s; /* Плавное изменение цвета фона и текста при наведении */
+        }
+
+
+
+        button:hover {
+            background-color: #ccc; /* Изменяем цвет фона на серый при наведении */
+            color: #333; /* Изменяем цвет текста на более темный при наведении */
+        }
+
+
+
+    </style>
+
+</head>
+<body>
+    <h1>Ship KZ Chat</h1>
+    <div id="socket" style="display: none">{{socket_endpoint}}</div>
+    <p></p>
+    <input type="file" id="imageInput" accept="image/*" style="display: none">
+    <div id="landing" style="display: none">
+        <input type="text" id="username" placeholder="Username">
+        <button id="join-btn">JOIN</button>
+    </div>
+
+    <div class = "chat-container" id="chat" style="display: none">
+
+        <div class="messagesInChat" id="messages"  ></div>
+        <div  class="input-container" id="inputContainer">
+            <textarea class="custom-textarea" id="messageInput"  rows="1" placeholder="Введите сообщение"></textarea>
+            <button onclick="sendMessage()">send</button>
+
+            <button id="uploadButton">📎</button>
+        </div>
+
+    </div>
+
+<script src = "/static_main/JavaScript/chat_logic.js"></script>
+<script>
+
+    let messageInput = document.getElementById('messageInput');
+    let messageContainer = document.getElementById('inputContainer');
+    let inputeContainerHeight = messageInput.scrollHeight;
+    messageInput.addEventListener("input", function () {
+        console.log('new iteration');
+        let messageInputeHeight = messageInput.scrollHeight;
+        console.log("message inpute height", inputeContainerHeight);
+        console.log("currect heigth",messageInputeHeight);
+        if (messageInputeHeight !== inputeContainerHeight) {
+            console.log('ding i need to change');
+            inputeContainerHeight = messageInputeHeight;
+            const messageContainer = document.querySelector(".input-container");
+            messageContainer.style.height = inputeContainerHeight + "px";
+        }
+});
+
+
+
+    messageInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>

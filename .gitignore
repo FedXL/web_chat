@@ -1,0 +1,8 @@
+config/
+*.log
+
+*.idea/
+*.pyc
+__pycache__/
+.idea/
+
